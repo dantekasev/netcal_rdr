@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Calculator & RDR Log Parse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #f3f4f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .tab-active { border-bottom: 2px solid #2563eb; color: #2563eb; font-weight: bold; }
+        .tab-inactive { color: #6b7280; }
+        .tab-inactive:hover { color: #374151; }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        
+        <div class="bg-white border-b">
+            <h1 class="text-2xl font-bold text-center text-gray-800 pt-6 pb-4">🛠️ Network Calculator & RDR Log Parse</h1>
+            <div class="flex justify-center space-x-8">
+                <button onclick="switchTab('ip')" id="tab-ip" class="tab-active py-4 px-4 focus:outline-none transition">
+                    IP Calculator
+                </button>
+                <button onclick="switchTab('rdr')" id="tab-rdr" class="tab-inactive py-4 px-4 focus:outline-none transition">
+                    RDR Parser
+                </button>
+            </div>
+        </div>
+
+        <div id="view-ip" class="p-6 md:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">IP Subnet Calculator</h2>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">IP Address / CIDR</label>
+                        <input class="shadow border rounded w-full py-3 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                               id="ipInput" type="text" placeholder="Contoh: 192.168.1.10/24">
+                        <p class="text-xs text-gray-500 mt-1">Format: x.x.x.x/xx</p>
+                    </div>
+                    <button onclick="calculateIP()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded transition mb-6">
+                        Hitung IP
+                    </button>
+
+                    <div id="resultAreaIP" class="hidden bg-blue-50 rounded-lg p-4 border border-blue-200">
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span class="text-gray-600">Network:</span> <span class="font-mono font-bold text-blue-800" id="resNetwork"></span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">Netmask:</span> <span class="font-mono text-gray-800" id="resMask"></span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">Total Host:</span> <span class="font-mono text-gray-800" id="resTotal"></span></div>
+                            <div class="border-t border-blue-200 my-2 pt-2"></div>
+                            <div class="flex justify-between"><span class="text-gray-600">Min IP:</span> <span class="font-mono text-green-700 font-bold" id="resMin"></span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">Max IP:</span> <span class="font-mono text-green-700 font-bold" id="resMax"></span></div>
+                            <div class="flex justify-between"><span class="text-gray-600">Broadcast:</span> <span class="font-mono text-red-600" id="resBroadcast"></span></div>
+                        </div>
+                    </div>
+                    <p id="errorMsgIP" class="text-red-500 text-center mt-4 text-sm hidden"></p>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-bold text-gray-700 mb-3 border-b pb-2">Referensi CIDR (/24 - /32)</h3>
+                    <div class="overflow-hidden border rounded-lg shadow-sm">
+                        <table class="min-w-full text-sm text-left">
+                            <thead class="bg-gray-100 text-gray-600 uppercase text-xs">
+                                <tr>
+                                    <th class="px-4 py-2 text-center">CIDR</th>
+                                    <th class="px-4 py-2">Subnet Mask</th>
+                                    <th class="px-4 py-2 text-right">Total IP</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 bg-white">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/24</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.0</td>
+                                    <td class="px-4 py-2 text-right">256</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/25</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.128</td>
+                                    <td class="px-4 py-2 text-right">128</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/26</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.192</td>
+                                    <td class="px-4 py-2 text-right">64</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/27</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.224</td>
+                                    <td class="px-4 py-2 text-right">32</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50 bg-yellow-50"> <td class="px-4 py-2 text-center font-bold text-blue-600">/28</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.240</td>
+                                    <td class="px-4 py-2 text-right">16</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/29</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.248</td>
+                                    <td class="px-4 py-2 text-right">8</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/30</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.252</td>
+                                    <td class="px-4 py-2 text-right">4</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/31</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.254</td>
+                                    <td class="px-4 py-2 text-right">2</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 text-center font-bold text-blue-600">/32</td>
+                                    <td class="px-4 py-2 font-mono">255.255.255.255</td>
+                                    <td class="px-4 py-2 text-right">1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="view-rdr" class="p-8 hidden">
+            <h2 class="text-xl font-semibold text-gray-700 mb-2">RDR Log Parser</h2>
+            <p class="text-sm text-gray-500 mb-4">Diameter/Radius Raw Log to Table Converter</p>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Paste Raw RDR Log</label>
+                <textarea id="rdrInput" rows="4" class="shadow border rounded w-full py-2 px-3 text-gray-700 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Paste log separated by comma here..."></textarea>
+            </div>
+            
+            <div class="flex space-x-2">
+                <button onclick="parseRDR()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded transition">
+                    Convert to Table
+                </button>
+                <button onclick="clearRDR()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-4 rounded transition">
+                    Clear
+                </button>
+            </div>
+
+            <div id="resultAreaRDR" class="mt-6 hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200 text-sm">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-2 px-4 border-b text-left text-gray-600 w-1/3">Field Name</th>
+                                <th class="py-2 px-4 border-b text-left text-gray-600">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rdrTableBody" class="text-gray-700">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+            <p id="errorMsgRDR" class="text-red-500 text-center mt-4 text-sm hidden"></p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. TAB NAVIGATION LOGIC ---
+        function switchTab(tab) {
+            const viewIP = document.getElementById('view-ip');
+            const viewRDR = document.getElementById('view-rdr');
+            const tabIP = document.getElementById('tab-ip');
+            const tabRDR = document.getElementById('tab-rdr');
+
+            if (tab === 'ip') {
+                viewIP.classList.remove('hidden');
+                viewRDR.classList.add('hidden');
+                tabIP.className = "tab-active py-4 px-4 focus:outline-none transition cursor-pointer";
+                tabRDR.className = "tab-inactive py-4 px-4 focus:outline-none transition cursor-pointer";
+            } else {
+                viewIP.classList.add('hidden');
+                viewRDR.classList.remove('hidden');
+                tabIP.className = "tab-inactive py-4 px-4 focus:outline-none transition cursor-pointer";
+                tabRDR.className = "tab-active py-4 px-4 focus:outline-none transition cursor-pointer";
+            }
+        }
+
+        // --- 2. IP CALCULATOR LOGIC ---
+        function ipToInt(ip) { return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0; }
+        function intToIp(int) { return [ (int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255 ].join('.'); }
+
+        function calculateIP() {
+            const input = document.getElementById('ipInput').value.trim();
+            const resultArea = document.getElementById('resultAreaIP');
+            const errorMsg = document.getElementById('errorMsgIP');
+            
+            resultArea.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+
+            try {
+                if (!input.includes('/')) throw "Harap masukkan format CIDR (cth: /24)";
+                const [ipStr, cidrStr] = input.split('/');
+                const cidr = parseInt(cidrStr, 10);
+                if (cidr < 0 || cidr > 32) throw "CIDR harus antara 0 - 32";
+                if (ipStr.split('.').length !== 4) throw "Format IP Address salah";
+
+                const ipInt = ipToInt(ipStr);
+                const maskInt = (0xffffffff << (32 - cidr)) >>> 0;
+                const networkInt = (ipInt & maskInt) >>> 0;
+                const broadcastInt = (networkInt | (~maskInt)) >>> 0;
+                const totalHosts = Math.pow(2, 32 - cidr);
+                const usableHosts = totalHosts > 2 ? totalHosts - 2 : 0;
+                
+                let minIpInt = usableHosts > 0 ? networkInt + 1 : networkInt;
+                let maxIpInt = usableHosts > 0 ? broadcastInt - 1 : broadcastInt;
+
+                document.getElementById('resNetwork').innerText = intToIp(networkInt);
+                document.getElementById('resMask').innerText = intToIp(maskInt);
+                document.getElementById('resTotal').innerText = usableHosts.toLocaleString();
+                document.getElementById('resMin').innerText = usableHosts > 0 ? intToIp(minIpInt) : "N/A";
+                document.getElementById('resMax').innerText = usableHosts > 0 ? intToIp(maxIpInt) : "N/A";
+                document.getElementById('resBroadcast').innerText = intToIp(broadcastInt);
+
+                resultArea.classList.remove('hidden');
+            } catch (e) {
+                errorMsg.innerText = "Error: " + e;
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        // --- 3. RDR PARSER LOGIC ---
+        const rdrHeaders = [
+            "Request Recieve Timer",
+            "RTT (Round Trip Timer)",
+            "APPID",
+            "Command Code",
+            "End to End ID",
+            "Flags",
+            "From Peer",
+            "To Peer",
+            "Trace ID (User ID)",
+            "MSISDN",
+            "IMSI",
+            "URI",
+            "NAI",
+            "Private",
+            "IP Trace",
+            "Session ID",
+            "Session Type",
+            "Req Origin Realm",
+            "Req Origin Host",
+            "Req Dest Realm",
+            "Req Dest Host",
+            "Answer Origin Realm",
+            "Answer Origin Host",
+            "Diameter Result Code",
+            "Diameter Result Code (Sub)",
+            "Diameter Result Message"
+        ];
+
+        function parseRDR() {
+            const rawInput = document.getElementById('rdrInput').value.trim();
+            const tableBody = document.getElementById('rdrTableBody');
+            const resultArea = document.getElementById('resultAreaRDR');
+            const errorMsg = document.getElementById('errorMsgRDR');
+
+            tableBody.innerHTML = "";
+            resultArea.classList.add('hidden');
+            errorMsg.classList.add('hidden');
+
+            if (!rawInput) {
+                errorMsg.innerText = "Mohon masukkan log RDR terlebih dahulu.";
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            const data = rawInput.split(',');
+
+            if (data.length !== rdrHeaders.length) {
+                errorMsg.innerHTML = `⚠️ <b>Peringatan:</b> Jumlah kolom data (${data.length}) tidak sama dengan jumlah header definisi (${rdrHeaders.length}).<br>Tabel mungkin tidak akurat.`;
+                errorMsg.classList.remove('hidden');
+            }
+
+            const maxRows = Math.max(data.length, rdrHeaders.length);
+
+            for (let i = 0; i < maxRows; i++) {
+                let key = rdrHeaders[i] || `Field ${i+1} (Undefined)`;
+                let val = data[i] || "-";
+                let valClass = "font-mono text-gray-800";
+                
+                if (key.includes("Session Type")) {
+                    if (val === "1") val += " (Initial)";
+                    else if (val === "2") val += " (Update)";
+                    else if (val === "3") val += " (Terminate)";
+                    valClass = "font-mono font-bold text-blue-600";
+                }
+
+                if (key.includes("Result Code") && val !== "" && !val.startsWith("2")) {
+                    valClass = "font-mono font-bold text-red-600";
+                }
+
+                const row = `
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="py-2 px-4 font-semibold text-gray-600">${key}</td>
+                        <td class="py-2 px-4 break-all ${valClass}">${val}</td>
+                    </tr>
+                `;
+                tableBody.insertAdjacentHTML('beforeend', row);
+            }
+            resultArea.classList.remove('hidden');
+        }
+
+        function clearRDR() {
+            document.getElementById('rdrInput').value = "";
+            document.getElementById('resultAreaRDR').classList.add('hidden');
+            document.getElementById('errorMsgRDR').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
