@@ -3,193 +3,698 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DINS SUPPORTING TOOLS</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>DINS Supporting Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Custom Base Styles */
-        body { background-color: #f8fafc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* Tab Styles */
-        .tab-active { border-bottom: 3px solid #2563eb; color: #2563eb; font-weight: 700; background-color: #eff6ff; }
-        .tab-inactive { color: #64748b; font-weight: 500; }
-        .tab-inactive:hover { color: #334155; background-color: #f1f5f9; }
-        
-        /* Custom Scrollbar untuk Textarea agar terlihat lebih rapi */
-        textarea::-webkit-scrollbar { width: 8px; }
-        textarea::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
-        textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #3b82f6;
+            --light-blue: #60a5fa;
+            --soft-blue: #93c5fd;
+            --pale-blue: #dbeafe;
+            --bg-white: #ffffff;
+            --bg-gray: #f8fafc;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(59, 130, 246, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f8fafc 100%);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        .tabs-container {
+            background: var(--bg-white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 140px;
+            padding: 1rem 1.5rem;
+            background: var(--bg-white);
+            border: none;
+            color: var(--text-gray);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: var(--pale-blue);
+            color: var(--primary-blue);
+        }
+
+        .tab.active {
+            color: var(--primary-blue);
+            background: var(--pale-blue);
+            border-bottom-color: var(--primary-blue);
+        }
+
+        .content {
+            background: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--pale-blue);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: var(--bg-white);
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px var(--pale-blue);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-gray);
+            color: var(--text-gray);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .result-box {
+            background: var(--bg-gray);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .result-row:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .result-value {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--primary-blue);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-white);
+            font-size: 0.9rem;
+        }
+
+        thead {
+            background: var(--pale-blue);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tbody tr:hover {
+            background: var(--pale-blue);
+        }
+
+        .table-container {
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-gray);
+        }
+
+        .stats {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+        }
+
+        .stat-item {
+            color: var(--text-gray);
+        }
+
+        .stat-value {
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-blue {
+            background: var(--pale-blue);
+            color: var(--primary-blue);
+        }
+
+        .badge-yellow {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-green {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .badge-red {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .error-msg {
+            background: #fee2e2;
+            border: 2px solid #fecaca;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            animation: fadeIn 0.6s ease 0.4s both;
+        }
+
+        .highlight {
+            background: #fef08a;
+            padding: 0.1rem 0.2rem;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+            .content {
+                padding: 1.5rem;
+            }
+            .tab {
+                padding: 0.875rem 1rem;
+                min-width: 120px;
+                font-size: 0.85rem;
+            }
+        }
+
+        textarea {
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+
+        .label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .cheatsheet-table {
+            font-size: 0.85rem;
+        }
+
+        .cheatsheet-table tbody tr:hover {
+            background: var(--pale-blue);
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-white);
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-gray);
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: var(--pale-blue);
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col py-6 px-4 md:py-10">
+<body>
+    <div class="container">
+        <header>
+            <h1>🛠️ DINS Supporting Tools</h1>
+            <p class="subtitle">IP Calculator • RDR Parser • Comparator • Diameter Result Codes</p>
+        </header>
 
-    <div class="flex-grow w-full max-w-5xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden border border-gray-100">
-        
-        <div class="bg-white border-b sticky top-0 z-10">
-            <h1 class="text-2xl md:text-3xl font-extrabold text-center text-gray-800 pt-6 pb-2 tracking-tight">
-                🛠️ DINS SUPPORTING TOOLS
-            </h1>
-            <p class="text-center text-gray-500 text-sm mb-6">IP Calc • RDR Parser • Text Comparator</p>
-            
-            <div class="flex overflow-x-auto">
-                <button onclick="switchTab('ip')" id="tab-ip" class="tab-active flex-1 py-4 px-2 focus:outline-none transition min-w-[120px] whitespace-nowrap">
-                    IP Calculator
-                </button>
-                <button onclick="switchTab('rdr')" id="tab-rdr" class="tab-inactive flex-1 py-4 px-2 focus:outline-none transition min-w-[120px] whitespace-nowrap">
-                    RDR Parser
-                </button>
-                <button onclick="switchTab('diff')" id="tab-diff" class="tab-inactive flex-1 py-4 px-2 focus:outline-none transition min-w-[120px] whitespace-nowrap">
-                    Comparator
-                </button>
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('ip')">IP Calculator</button>
+                <button class="tab" onclick="switchTab('rdr')">RDR Parser</button>
+                <button class="tab" onclick="switchTab('comparator')">Comparator</button>
+                <button class="tab" onclick="switchTab('diameter')">Diameter Codes</button>
             </div>
         </div>
 
-        <div id="view-ip" class="p-6 md:p-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div>
-                    <h2 class="text-lg font-bold text-gray-700 mb-4 flex items-center">
-                        <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-2">🧮</span> Calculate Subnet
-                    </h2>
-                    <div class="mb-4">
-                        <label class="block text-gray-600 text-sm font-semibold mb-2">IP Address / CIDR</label>
-                        <div class="relative">
-                            <input class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" 
-                                   id="ipInput" type="text" placeholder="e.g. 192.168.10.55/28">
+        <div class="content">
+            <!-- IP CALCULATOR -->
+            <div id="view-ip" class="view active">
+                <div class="grid grid-2">
+                    <div>
+                        <h2 class="section-title">
+                            <span class="icon">🧮</span>
+                            Calculate Subnet
+                        </h2>
+                        <div style="margin-bottom: 1rem;">
+                            <label class="label">IP Address / CIDR</label>
+                            <input type="text" id="ipInput" placeholder="e.g. 192.168.10.55/28">
                         </div>
-                    </div>
-                    <button onclick="calculateIP()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition transform active:scale-95">
-                        Hitung Network
-                    </button>
+                        <button class="btn btn-primary" onclick="calculateIP()" style="width: 100%;">
+                            Calculate Network
+                        </button>
 
-                    <div id="resultAreaIP" class="hidden mt-6 bg-slate-50 rounded-xl p-5 border border-slate-200 shadow-inner">
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between border-b border-slate-200 pb-2"><span class="text-gray-500">Network Address</span> <span class="font-mono font-bold text-blue-700" id="resNetwork"></span></div>
-                            <div class="flex justify-between border-b border-slate-200 pb-2"><span class="text-gray-500">Subnet Mask</span> <span class="font-mono text-gray-800" id="resMask"></span></div>
-                            <div class="flex justify-between border-b border-slate-200 pb-2"><span class="text-gray-500">Total Host</span> <span class="font-mono text-gray-800" id="resTotal"></span></div>
-                            <div class="flex justify-between border-b border-slate-200 pb-2"><span class="text-gray-500">Usable Min</span> <span class="font-mono text-green-600 font-bold" id="resMin"></span></div>
-                            <div class="flex justify-between border-b border-slate-200 pb-2"><span class="text-gray-500">Usable Max</span> <span class="font-mono text-green-600 font-bold" id="resMax"></span></div>
-                            <div class="flex justify-between"><span class="text-gray-500">Broadcast IP</span> <span class="font-mono text-red-500 font-medium" id="resBroadcast"></span></div>
+                        <div id="resultAreaIP" class="result-box hidden">
+                            <div class="result-row">
+                                <span class="result-label">Network Address</span>
+                                <span class="result-value" id="resNetwork"></span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Subnet Mask</span>
+                                <span class="result-value" id="resMask"></span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Total Host</span>
+                                <span class="result-value" id="resTotal"></span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Usable Min</span>
+                                <span class="result-value" style="color: #059669;" id="resMin"></span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Usable Max</span>
+                                <span class="result-value" style="color: #059669;" id="resMax"></span>
+                            </div>
+                            <div class="result-row">
+                                <span class="result-label">Broadcast IP</span>
+                                <span class="result-value" style="color: #dc2626;" id="resBroadcast"></span>
+                            </div>
+                        </div>
+                        <div id="errorMsgIP" class="error-msg"></div>
+                    </div>
+
+                    <div>
+                        <h3 class="section-title">
+                            <span class="icon">📚</span>
+                            Cheat Sheet (/24-/32)
+                        </h3>
+                        <div class="table-container">
+                            <table class="cheatsheet-table">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center;">CIDR</th>
+                                        <th>Netmask</th>
+                                        <th style="text-align: right;">IPs</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td style="text-align: center;"><b>/24</b></td><td style="font-family: monospace;">.0</td><td style="text-align: right;">256</td></tr>
+                                    <tr><td style="text-align: center;"><b>/25</b></td><td style="font-family: monospace;">.128</td><td style="text-align: right;">128</td></tr>
+                                    <tr><td style="text-align: center;"><b>/26</b></td><td style="font-family: monospace;">.192</td><td style="text-align: right;">64</td></tr>
+                                    <tr><td style="text-align: center;"><b>/27</b></td><td style="font-family: monospace;">.224</td><td style="text-align: right;">32</td></tr>
+                                    <tr style="background: #fef3c7;"><td style="text-align: center;"><b>/28</b></td><td style="font-family: monospace; font-weight: 700;">.240</td><td style="text-align: right; font-weight: 700;">16</td></tr>
+                                    <tr><td style="text-align: center;"><b>/29</b></td><td style="font-family: monospace;">.248</td><td style="text-align: right;">8</td></tr>
+                                    <tr><td style="text-align: center;"><b>/30</b></td><td style="font-family: monospace;">.252</td><td style="text-align: right;">4</td></tr>
+                                    <tr><td style="text-align: center;"><b>/32</b></td><td style="font-family: monospace;">.255</td><td style="text-align: right;">1</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <p id="errorMsgIP" class="text-red-600 bg-red-50 border border-red-200 text-center mt-4 text-sm font-medium hidden p-3 rounded-lg"></p>
+                </div>
+            </div>
+
+            <!-- RDR PARSER -->
+            <div id="view-rdr" class="view">
+                <h2 class="section-title">
+                    <span class="icon">🔍</span>
+                    RDR Log Parser
+                </h2>
+                <p style="color: var(--text-gray); margin-bottom: 1rem; font-size: 0.95rem;">
+                    Paste raw, comma-separated Diameter/Radius log line below.
+                </p>
+                <textarea id="rdrInput" rows="4" placeholder="Paste log here..."></textarea>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button class="btn btn-primary" onclick="parseRDR()" style="flex: 1;">Convert to Table</button>
+                    <button class="btn btn-secondary" onclick="clearRDR()">Clear</button>
                 </div>
 
-                <div>
-                    <h3 class="text-lg font-bold text-gray-700 mb-3 pb-2 flex items-center">
-                        <span class="bg-gray-100 text-gray-600 p-2 rounded-lg mr-2">📚</span> Cheat Sheet (/24-/32)
-                    </h3>
-                    <div class="overflow-hidden border border-gray-200 rounded-xl shadow-sm">
-                        <table class="min-w-full text-sm text-left">
-                            <thead class="bg-gray-50 text-gray-500 uppercase text-xs font-semibold">
+                <div id="resultAreaRDR" class="hidden" style="margin-top: 1rem;">
+                    <div class="table-container" style="border: 1px solid var(--border-color);">
+                        <div style="overflow-x: auto;">
+                            <table style="font-size: 0.85rem;">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 35%; padding: 0.5rem 0.75rem;">Field Name</th>
+                                        <th style="padding: 0.5rem 0.75rem;">Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rdrTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMPARATOR -->
+            <div id="view-comparator" class="view">
+                <h2 class="section-title">
+                    <span class="icon">⚖️</span>
+                    Text & IMSI Comparator
+                </h2>
+                <p style="color: var(--text-gray); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Detects items that are <b>Only in New Data</b>. Supports numbers, text, hostnames, etc. Automatic separator detection (comma/space/newline).
+                </p>
+
+                <div class="grid grid-2">
+                    <div>
+                        <label class="label">1. Old Data (Original)</label>
+                        <textarea id="diffInput1" rows="8" placeholder="Paste old data here..."></textarea>
+                    </div>
+                    <div>
+                        <label class="label">2. New Data (Updated)</label>
+                        <textarea id="diffInput2" rows="8" placeholder="Paste new data here..."></textarea>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="compareText()" style="width: 100%; margin-top: 1.5rem;">
+                    Compare Data
+                </button>
+
+                <div id="resultAreaDiff" class="hidden" style="margin-top: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <h3 style="font-weight: 700; color: var(--text-dark);">Result (New Items):</h3>
+                        <span id="diffCount" class="badge badge-blue">0 Found</span>
+                    </div>
+                    
+                    <div style="position: relative;">
+                        <textarea id="diffOutput" readonly rows="12" style="background: var(--bg-gray);"></textarea>
+                        <button class="copy-btn" onclick="copyDiffResult()">📋 Copy</button>
+                    </div>
+                </div>
+                
+                <div id="errorMsgDiff" class="error-msg"></div>
+            </div>
+
+            <!-- DIAMETER RESULT CODES -->
+            <div id="view-diameter" class="view">
+                <h2 class="section-title">
+                    <span class="icon">📊</span>
+                    Diameter Result Codes Explorer
+                </h2>
+                
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by App ID, Result Code, Name, Description, or Category...">
+                    <span class="search-icon">🔍</span>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        Total Entries: <span class="stat-value" id="totalCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        Showing: <span class="stat-value" id="visibleCount">0</span>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-wrapper">
+                        <table id="dataTable">
+                            <thead>
                                 <tr>
-                                    <th class="px-4 py-3 text-center">CIDR</th>
-                                    <th class="px-4 py-3">Netmask</th>
-                                    <th class="px-4 py-3 text-right">IPs</th>
+                                    <th>App ID</th>
+                                    <th>Result Code</th>
+                                    <th>Category</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>dsTest OM</th>
+                                    <th>Reference Point</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100 bg-white">
-                                <tr class="hover:bg-blue-50 transition"><td class="px-4 py-2 text-center font-bold text-blue-600">/24</td><td class="px-4 py-2 font-mono text-gray-600">.0</td><td class="px-4 py-2 text-right">256</td></tr>
-                                <tr class="hover:bg-blue-50 transition"><td class="px-4 py-2 text-center font-bold text-blue-600">/25</td><td class="px-4 py-2 font-mono text-gray-600">.128</td><td class="px-4 py-2 text-right">128</td></tr>
-                                <tr class="hover:bg-blue-50 transition"><td class="px-4 py-2 text-center font-bold text-blue-600">/26</td><td class="px-4 py-2 font-mono text-gray-600">.192</td><td class="px-4 py-2 text-right">64</td></tr>
-                                <tr class="hover:bg-blue-50 transition"><td class="px-4 py-2 text-center font-bold text-blue-600">/27</td><td class="px-4 py-2 font-mono text-gray-600">.224</td><td class="px-4 py-2 text-right">32</td></tr>
-                                <tr class="bg-yellow-50 border-l-4 border-yellow-400"><td class="px-4 py-2 text-center font-bold text-blue-600">/28</td><td class="px-4 py-2 font-mono text-gray-800 font-bold">.240</td><td class="px-4 py-2 text-right font-bold">16</td></tr>
-                                <tr class="hover:bg-blue-50 transition"><td class="px-4 py-2 text-center font-bold text-blue-600">/29</td><td class="px-4 py-2 font-mono text-gray-600">.248</td><td class="px-4 py-2 text-right">8</td></tr>
-                                <tr class="hover:bg-blue-50 transition"><td class="px-4 py-2 text-center font-bold text-blue-600">/30</td><td class="px-4 py-2 font-mono text-gray-600">.252</td><td class="px-4 py-2 text-right">4</td></tr>
-                                <tr class="hover:bg-blue-50 transition"><td class="px-4 py-2 text-center font-bold text-blue-600">/32</td><td class="px-4 py-2 font-mono text-gray-600">.255</td><td class="px-4 py-2 text-right">1</td></tr>
-                            </tbody>
+                            <tbody id="tableBody"></tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div id="view-rdr" class="p-6 md:p-8 hidden">
-            <h2 class="text-lg font-bold text-gray-700 mb-2 flex items-center">
-                <span class="bg-purple-100 text-purple-600 p-2 rounded-lg mr-2">🔍</span> RDR Log Parser
-            </h2>
-            <p class="text-sm text-gray-500 mb-4">Paste raw, comma-separated Diameter/Radius log line below.</p>
-            <div class="mb-4">
-                <textarea id="rdrInput" rows="3" class="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 text-xs font-mono focus:outline-none focus:ring-2 focus:ring-purple-500 transition" placeholder="Paste log here..."></textarea>
-            </div>
-            <div class="flex gap-3">
-                <button onclick="parseRDR()" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-4 rounded-lg shadow transition">Convert to Table</button>
-                <button onclick="clearRDR()" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2.5 px-4 rounded-lg transition">Clear</button>
-            </div>
-            
-            <div id="resultAreaRDR" class="mt-6 hidden animate-fade-in">
-                <div class="overflow-x-auto border border-gray-200 rounded-xl shadow-sm">
-                    <table class="min-w-full bg-white text-sm">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="py-3 px-5 border-b border-gray-200 text-left text-gray-600 w-1/3 font-semibold">Field Name</th>
-                                <th class="py-3 px-5 border-b border-gray-200 text-left text-gray-600 font-semibold">Value</th>
-                            </tr>
-                        </thead>
-                        <tbody id="rdrTableBody" class="text-gray-700 divide-y divide-gray-100"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="view-diff" class="p-6 md:p-8 hidden">
-            <h2 class="text-lg font-bold text-gray-700 mb-4 flex items-center">
-                <span class="bg-emerald-100 text-emerald-600 p-2 rounded-lg mr-2">⚖️</span> Text & IMSI Comparator
-            </h2>
-            <p class="text-sm text-gray-500 mb-6">Mendeteksi item yang <b>Hanya Ada di Data Baru</b>. Support angka, teks, hostname, dll. Separator otomatis (koma/spasi/enter).</p>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2">1. Data Lama (Original)</label>
-                    <textarea id="diffInput1" rows="8" class="shadow-sm border border-gray-300 rounded-lg w-full p-3 text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Paste data lama di sini..."></textarea>
-                </div>
-                <div>
-                    <label class="block text-gray-700 text-sm font-bold mb-2">2. Data Baru (Updated)</label>
-                    <textarea id="diffInput2" rows="8" class="shadow-sm border border-gray-300 rounded-lg w-full p-3 text-xs font-mono focus:ring-2 focus:ring-emerald-500 focus:outline-none" placeholder="Paste data baru di sini..."></textarea>
-                </div>
-            </div>
-
-            <button onclick="compareText()" class="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition">
-                Bandingkan Data
-            </button>
-
-            <div id="resultAreaDiff" class="mt-8 hidden">
-                <h3 class="text-md font-bold text-gray-800 mb-2 flex items-center">
-                    Hasil (Item Baru): 
-                    <span id="diffCount" class="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded-full ml-2">0 Found</span>
-                </h3>
                 
-                <div class="relative">
-                    <textarea id="diffOutput" readonly rows="12" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-4 text-sm font-mono text-gray-800 focus:outline-none whitespace-pre"></textarea>
-                    
-                    <button onclick="copyDiffResult()" class="absolute top-3 right-3 bg-white hover:bg-gray-50 text-gray-600 border border-gray-300 text-xs font-semibold py-1.5 px-3 rounded-md shadow-sm transition flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
-                        Copy
-                    </button>
+                <div id="noResults" style="text-align: center; padding: 3rem; color: var(--text-gray); display: none;">
+                    No results found
                 </div>
             </div>
-            
-            <p id="errorMsgDiff" class="text-red-600 bg-red-50 border border-red-200 text-center mt-4 text-sm font-medium hidden p-3 rounded-lg"></p>
         </div>
 
-    </div> <footer class="mt-8 text-center text-xs text-gray-400 font-medium">
-        <p>Dante - Uangel Indonesia</p>
-    </footer>
-
+        <footer>
+            Dante - Uangel Indonesia
+        </footer>
+    </div>
 
     <script>
-        // --- TAB NAVIGATION ---
+        // TAB SWITCHING
         function switchTab(tabName) {
-            ['ip', 'rdr', 'diff'].forEach(t => {
-                document.getElementById(`view-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).className = "tab-inactive flex-1 py-4 px-2 focus:outline-none transition min-w-[120px] whitespace-nowrap cursor-pointer";
-            });
-            document.getElementById(`view-${tabName}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabName}`).className = "tab-active flex-1 py-4 px-2 focus:outline-none transition min-w-[120px] whitespace-nowrap cursor-pointer";
+            const tabs = document.querySelectorAll('.tab');
+            const views = document.querySelectorAll('.view');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            views.forEach(view => view.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('view-' + tabName).classList.add('active');
         }
 
-        // --- IP CALCULATOR LOGIC ---
-        function ipToInt(ip) { return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0; }
-        function intToIp(int) { return [ (int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255 ].join('.'); }
+        // IP CALCULATOR
+        function ipToInt(ip) {
+            return ip.split('.').reduce((acc, octet) => (acc << 8) + parseInt(octet, 10), 0) >>> 0;
+        }
+
+        function intToIp(int) {
+            return [(int >>> 24) & 255, (int >>> 16) & 255, (int >>> 8) & 255, int & 255].join('.');
+        }
 
         function calculateIP() {
             const input = document.getElementById('ipInput').value.trim();
@@ -197,15 +702,18 @@
             const errorMsg = document.getElementById('errorMsgIP');
             
             resultArea.classList.add('hidden');
-            errorMsg.classList.add('hidden');
+            errorMsg.classList.remove('show');
 
             try {
-                if (!input.includes('/')) throw "Format salah. Harap masukkan format CIDR (contoh: 192.168.1.1/28)";
+                if (!input.includes('/')) throw "Invalid format. Please enter CIDR format (example: 192.168.1.1/28)";
+                
                 const [ipStr, cidrStr] = input.split('/');
                 const cidr = parseInt(cidrStr, 10);
                 const ipParts = ipStr.split('.');
-                if (isNaN(cidr) || cidr < 0 || cidr > 32) throw "CIDR Prefix tidak valid (harus 0-32)";
-                if (ipParts.length !== 4 || ipParts.some(part => isNaN(parseInt(part)) || part < 0 || part > 255)) throw "IP Address tidak valid";
+                
+                if (isNaN(cidr) || cidr < 0 || cidr > 32) throw "Invalid CIDR prefix (must be 0-32)";
+                if (ipParts.length !== 4 || ipParts.some(part => isNaN(parseInt(part)) || part < 0 || part > 255)) 
+                    throw "Invalid IP address";
 
                 const ipInt = ipToInt(ipStr);
                 const maskInt = (0xffffffff << (32 - cidr)) >>> 0;
@@ -223,14 +731,15 @@
                 document.getElementById('resMin').innerText = usableHosts > 0 ? intToIp(minIp) : "N/A";
                 document.getElementById('resMax').innerText = usableHosts > 0 ? intToIp(maxIp) : "N/A";
                 document.getElementById('resBroadcast').innerText = intToIp(broadcastInt);
+                
                 resultArea.classList.remove('hidden');
             } catch (e) {
                 errorMsg.innerText = "Error: " + e;
-                errorMsg.classList.remove('hidden');
+                errorMsg.classList.add('show');
             }
         }
 
-        // --- RDR PARSER LOGIC ---
+        // RDR PARSER
         const rdrHeaders = [
             "Request Recieve Timer", "RTT (Round Trip Timer)", "APPID", "Command Code", "End to End ID", "Flags", 
             "From Peer", "To Peer", "Trace ID (User ID)", "MSISDN", "IMSI", "URI", "NAI", "Private", "IP Trace", 
@@ -248,46 +757,44 @@
 
             if (!raw) return;
 
-            // Basic CSV split, handling potential quoted values loosely if needed in future
             const data = raw.split(',');
             const maxRows = Math.max(data.length, rdrHeaders.length);
 
             for (let i = 0; i < maxRows; i++) {
                 let key = rdrHeaders[i] || `Field ${i+1}`;
                 let val = data[i] ? data[i].trim() : "";
-                let style = "text-gray-800 font-mono";
+                let style = "font-family: monospace;";
                 let displayVal = val === "" ? "-" : val;
 
                 if (key.includes("Session Type") && val) {
                     if (val === "1") displayVal += " (Initial)";
                     else if (val === "2") displayVal += " (Update)";
                     else if (val === "3") displayVal += " (Terminate)";
-                    style = "text-blue-600 font-bold font-mono";
+                    style = "color: var(--primary-blue); font-weight: 700; font-family: monospace;";
                 }
                 if (key.includes("Result Code") && val !== "" && !val.startsWith("2")) {
-                    style = "text-red-600 font-bold font-mono";
+                    style = "color: #dc2626; font-weight: 700; font-family: monospace;";
                 }
 
                 tbody.insertAdjacentHTML('beforeend', `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="py-2 px-5 font-semibold text-gray-600 text-xs uppercase tracking-wide border-b border-gray-100">${key}</td>
-                        <td class="py-2 px-5 break-all ${style} text-sm border-b border-gray-100 leading-relaxed">${displayVal}</td>
+                    <tr>
+                        <td style="font-weight: 600; color: var(--text-gray); font-size: 0.8rem; padding: 0.4rem 0.75rem;">${key}</td>
+                        <td style="${style} padding: 0.4rem 0.75rem;">${displayVal}</td>
                     </tr>
                 `);
             }
             resultArea.classList.remove('hidden');
         }
+
         function clearRDR() {
             document.getElementById('rdrInput').value = "";
             document.getElementById('resultAreaRDR').classList.add('hidden');
         }
 
-        // --- TEXT COMPARATOR LOGIC ---
+        // COMPARATOR
         function cleanAndSplit(text) {
             if (!text) return [];
-            // Sanitasi: Ganti simbol separator umum jadi spasi, lalu split.
-            // Tidak menghapus karakter alphanumeric agar support hostname/text.
-            return text.replace(/[(),;]/g, ' ') 
+            return text.replace(/[(),;]/g, ' ')
                        .replace(/\n/g, ' ')
                        .split(' ')
                        .map(t => t.trim())
@@ -303,30 +810,27 @@
             const diffCount = document.getElementById('diffCount');
 
             resultArea.classList.add('hidden');
-            errorMsg.classList.add('hidden');
+            errorMsg.classList.remove('show');
 
             if (!raw1 && !raw2) {
-                errorMsg.innerText = "Mohon isi setidaknya satu kolom data.";
-                errorMsg.classList.remove('hidden');
+                errorMsg.innerText = "Please fill in at least one data field.";
+                errorMsg.classList.add('show');
                 return;
             }
 
             const listOld = new Set(cleanAndSplit(raw1));
             const listNew = cleanAndSplit(raw2);
-
-            // Cari item di listNew yang TIDAK ada di listOld
             const diffSet = new Set(listNew.filter(item => !listOld.has(item)));
             const diffArray = Array.from(diffSet);
 
             if (diffArray.length === 0) {
-                diffOutput.value = "Tidak ada item baru yang ditemukan (Data baru identik atau subset dari data lama).";
+                diffOutput.value = "No new items found (New data is identical or subset of old data).";
                 diffCount.innerText = "0 Found";
-                diffCount.className = "bg-gray-100 text-gray-500 text-xs font-bold px-2 py-1 rounded-full ml-2";
+                diffCount.className = "badge badge-blue";
             } else {
-                // Output digabung dengan Newline (\n) untuk list vertikal
                 diffOutput.value = diffArray.join("\n");
                 diffCount.innerText = `${diffArray.length} Found`;
-                diffCount.className = "bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded-full ml-2";
+                diffCount.className = "badge badge-green";
             }
 
             resultArea.classList.remove('hidden');
@@ -334,25 +838,91 @@
 
         function copyDiffResult() {
             const copyText = document.getElementById("diffOutput");
-            if (!copyText.value || copyText.value.startsWith("Tidak ada item")) return;
+            if (!copyText.value || copyText.value.startsWith("No new items")) return;
             
-            copyText.select();
-            copyText.setSelectionRange(0, 99999); // Untuk mobile
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.style.color = 'var(--primary-blue)';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                alert("Copy failed. Please copy manually.");
+            });
+        }
+
+        // DIAMETER RESULT CODES
+        const diameterData = [{"App ID": "0", "Result Code": "5001", "Category": "Permanent Failure", "Name": "DIAMETER_AVP_UNSUPPORTED", "Description": "AVP received that is not recognized or supported and was marked with the 'M' (Mandatory) bit.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5001", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_UNKNOWN", "Description": "Message was received for a user or a wildcard identity that is unknown.", "dsTest OM": "Unknown User Error Received; Transaction Failed", "Reference Point": "Cx/Dx, S6, S13, STa, S6b/H2, SWd, SWa, SWm, SWx, SLg, SLh, PC4, T6a/T6b"}, {"App ID": "0", "Result Code": "5002", "Category": "Permanent Failure", "Name": "DIAMETER_UNKNOWN_SESSION_ID", "Description": "Request received with an unknown session ID.", "dsTest OM": "Unknown Session Error Received; Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5002", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IDENTITIES_DONT_MATCH", "Description": "Message was received with a public identity and a private identity for a user, and server determines that the public identity does not correspond to the private identity.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, Sh/Dh"}, {"App ID": "0", "Result Code": "5003", "Category": "Permanent Failure", "Name": "DIAMETER_AUTHORIZATION_REJECTED", "Description": "Request received for which the user could not be authorized.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5003", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IDENTITY_NOT_REGISTERED", "Description": "A query for location information is received for a public identity that has not been registered before. The user to which this identity belongs cannot be given service in this situation.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, STa, S6b/H2, SWd, SWa, SWm, SWx"}, {"App ID": "0", "Result Code": "5004", "Category": "Permanent Failure", "Name": "DIAMETER_INVALID_AVP_VALUE", "Description": "The request contained an AVP with an invalid value in its portion.", "dsTest OM": "Invalid Data Value Errors Received; Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5004", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ROAMING_NOT_ALLOWED", "Description": "Sent by the HSS to indicate that the subscriber is not allowed to roam within the MME or SGSN area.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, S6, S13, STa, S6b/H2, SWd, SWa, SWm, SWx"}, {"App ID": "0", "Result Code": "5005", "Category": "Permanent Failure", "Name": "DIAMETER_MISSING_AVP", "Description": "Request received does not contain an AVP required by the command code definition.", "dsTest OM": "Data Missing Errors Received; Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5005", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IDENTITY_ALREADY_REGISTERED", "Description": "Identity has already a server assigned and the registration status does not allow that it is overwritten.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, STa, S6b/H2, SWd, SWa, SWm, SWx"}, {"App ID": "0", "Result Code": "5006", "Category": "Permanent Failure", "Name": "DIAMETER_RESOURCES_EXCEEDED", "Description": "Request was received that cannot be authorized because the user has already expended allowed resources.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5006", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_AUTH_SCHEME_NOT_SUPPORTED", "Description": "Authentication scheme in an authentication request is not supported.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx"}, {"App ID": "0", "Result Code": "5007", "Category": "Permanent Failure", "Name": "DIAMETER_CONTRADICTING_AVPS", "Description": "Request was received with AVPs that are contradictory to each other.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5007", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IN_ASSIGNMENT_TYPE", "Description": "Identity being registered has already the same server assigned and the registration status does not allow the server assignment type or the Public Identity type received in the request is not allowed for the indicated server-assignment-type.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx"}, {"App ID": "0", "Result Code": "5008", "Category": "Permanent Failure", "Name": "DIAMETER_AVP_NOT_ALLOWED", "Description": "Message was received with an AVP that must not be present.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5008", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TOO_MUCH_DATA", "Description": "Volume of the data pushed to the receiving entity exceeds its capacity.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx"}, {"App ID": "10415 (3GPP)", "Result Code": "5009", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NOT_SUPPORTED_USER_DATA", "Description": "The S-CSCF informs HSS that the received subscription data contained information which was not recognised/supported", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx"}, {"App ID": "0", "Result Code": "5010", "Category": "Permanent Failure", "Name": "DIAMETER_NO_COMMON_APPLICATION", "Description": "Response of CER if no common application supported between the peers.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "5011", "Category": "Permanent Failure", "Name": "DIAMETER_UNSUPPORTED_VERSION", "Description": "Unsupported version.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5011", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_FEATURE_UNSUPPORTED", "Description": "A request application message was received indicating that the origin host requests that the command pair would be handled using a feature which is not supported by the destination host.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, Sh/Dh"}, {"App ID": "0", "Result Code": "5012", "Category": "Permanent Failure", "Name": "DIAMETER_UNABLE_TO_COMPLY", "Description": "Message rejected because of unspecified reasons.", "dsTest OM": "Unable to Comply Error Received; Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "5012", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SERVING_NODE_FEATURE_UNSUPPORTED", "Description": "Used when the HSS supports the P-CSCF-Restoration-mechanism feature, but none of the user serving node(s) supports it, as described by 3GPP TS 23.380", "dsTest OM": "Unable to Comply Error Received; Transaction Failed", "Reference Point": "Cx/Dx"}, {"App ID": "0", "Result Code": "5013", "Category": "Permanent Failure", "Name": "DIAMETER_INVALID_BIT_IN_HEADER", "Description": "Reserved bit in the Diameter header is set to one (1) or the bits in the Diameter header are set incorrectly.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "5014", "Category": "Permanent Failure", "Name": "DIAMETER_INVALID_AVP_LENGTH", "Description": "Invalid AVP length.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "5015", "Category": "Permanent Failure", "Name": "DIAMETER_INVALID_MESSAGE_LENGTH", "Description": "Invalid Message length.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "5016", "Category": "Permanent Failure", "Name": "DIAMETER_INVALID_AVP_BIT_COMBO", "Description": "Request contained an AVP with which is not allowed to have the given value in the AVP Flags field.", "dsTest OM": "Transaction Failed", "Reference Point": ">Base Diameter"}, {"App ID": "0", "Result Code": "5017", "Category": "Permanent Failure", "Name": "DIAMETER_NO_COMMON_SECURITY", "Description": "Response to CER if no common security mechanism supported between the peers.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "5018", "Category": "Permanent Failure", "Name": "DIAMETER_RADIUS_AVP_UNTRANSLATABLE", "Description": "Where a Diameter/RADIUS gateway receives a Diameter message containing a NAS-Filter-Rule AVP that is too large to fit into a RADIUS packet", "dsTest OM": "Transaction Failed", "Reference Point": "RFC4849"}, {"App ID": "0", "Result Code": "5024", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NO_FOREIGN_HA_SERVICE", "Description": "Used by the AAAF to inform the AAAH that allocation of a home agent in the foreign domain is not permitted at this time.", "dsTest OM": "Transaction Failed", "Reference Point": "SIP, RFC4740"}, {"App ID": "0", "Result Code": "5025", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_END_TO_END_MIP_KEY_ENCRYPTION", "Description": "Used by the AAAF to inform the AAAH that allocation of a home agent in the foreign domain is not permitted at this time.", "dsTest OM": "Transaction Failed", "Reference Point": "SIP, RFC4740"}, {"App ID": "0", "Result Code": "5030", "Category": "Permanent Failure", "Name": "DIAMETER_USER_UNKNOWN", "Description": "The server does not recognize the user.", "dsTest OM": "Unknown User Error Received; Transaction Failed", "Reference Point": "SIP, RFC4740"}, {"App ID": "0", "Result Code": "5031", "Category": "Permanent Failure", "Name": "DIAMETER_RATING_FAILED", "Description": "OCS was not able to correctly rate the service due to errors in one or more AVPs provided in the CCR.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "", "Result Code": "5032", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_UNKNOWN", "Description": "The SIP-AOR AVP value does not belong to a known user in this realm.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5033", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IDENTITIES_DONT_MATCH", "Description": "The value in one of the SIP-AOR AVPs is not allocated to the user specified in the User-Name AVP.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5034", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IDENTITY_NOT_REGISTERED", "Description": "A query for location information is received for a SIP AOR that has not been registered before. The user to which this identity belongs cannot be given service in this situation.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5035", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ROAMING_NOT_ALLOWED", "Description": "The user is not allowed to roam to the visited network.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5036", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IDENTITY_ALREADY_REGISTERED", "Description": "The identity being registered has already been assigned a server and the registration status does not allow that it is overwritten.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5037", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_AUTH_SCHEME_NOT_SUPPORTED", "Description": "The authentication scheme indicated in an authentication request is not supported.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5038", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IN_ASSIGNMENT_TYPE", "Description": "The SIP server address sent in the SIP-Server-URI AVP value of the Diameter Server-Assignment-Request (SAR) command is the same SIP server address that is currently assigned to the user name, but the SIP-Server-Assignment-Type AVP is not allowed.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5039", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TOO_MUCH_DATA", "Description": "The Diameter peer in the SIP server receives more data than it can accept. The SIP server cannot overwrite the already stored data.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "5040", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NOT SUPPORTED_USER_DATA", "Description": "The SIP server informs the Diameter server that the received subscription data contained information that was not recognized or supported.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "10415 (3GPP)", "Result Code": "5041", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_NO_WLAN_SUBSCRIPTION", "Description": "Message was received for a user with no WLAN subscription.", "dsTest OM": "Transaction Failed", "Reference Point": "Wa, Wd, Wx, Wm, Wd"}, {"App ID": "10415 (3GPP)", "Result Code": "5042", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_W-APN_UNUSED_BY_USER", "Description": "Message was received for a user who has no subscription for a specified W-APN.", "dsTest OM": "", "Reference Point": "Wa, Wd, Wx, Wm, Wd"}, {"App ID": "10415 (3GPP)", "Result Code": "5043", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NO_ACCESS_INDEPENDENT_SUBSCRIPTION", "Description": "Message was received requesting WLAN 3GPP IP access for a user whose subscription does not allow it if it was not previously authenticated by WLAN Direct IP Access.", "dsTest OM": "Transaction Failed", "Reference Point": "Wa,Wd,Wx,Wm,Wd"}, {"App ID": "10415 (3GPP)", "Result Code": "5044", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_NO_W-APN_SUBSCRIPTION", "Description": "Message was received requesting WLAN 3GPP IP access for a user whose subscription does not allow it if it was not previously authenticated by WLAN 3GPP direct access.", "dsTest OM": "Transaction Failed", "Reference Point": "Wa, Wd, Wx, Wm, Wd"}, {"App ID": "10415 (3GPP)", "Result Code": "5045", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNSUITABLE_NETWORK", "Description": "", "dsTest OM": "Transaction Failed", "Reference Point": "Wa, Wd, Wx, Wm, Wd"}, {"App ID": "10415 (3GPP)", "Result Code": "5048", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_EAP_CODE_UNKNOWN", "Description": "Used by the Diameter server to inform the peer that the received EAP-Payload AVP contains an EAP packet with an unknown EAP code.", "dsTest OM": "Transaction Failed", "Reference Point": "STa, S6b, SWd, SWm, SWx"}, {"App ID": "10415 (3GPP)", "Result Code": "5061", "Category": "Permanent Failure", "Name": "INVALID_SERVICE_INFORMATION", "Description": "PCRF rejects new or modified service information the service information provided by the AF is invalid /insufficient for the server to perform the requested action.", "dsTest OM": "Transaction Failed", "Reference Point": "Rx/Gq"}, {"App ID": "10415 (3GPP)", "Result Code": "5062", "Category": "Permanent Failure", "Name": "FILTER_RESTRICTIONS", "Description": "PCRF rejects new or modified service information because the Flow-Description AVPs cannot be handled by the server.", "dsTest OM": "Transaction Failed", "Reference Point": "Rx/Gq"}, {"App ID": "10415 (3GPP)", "Result Code": "5063", "Category": "Permanent Failure", "Name": "REQUESTED_SERVICE_NOT_AUTHORIZED", "Description": "PCRF rejects new or modified service information because the requested service is not consistent with the related subscription information /operator defined policy rules and/or the supported features in the IP-CAN network.", "dsTest OM": "Transaction Failed", "Reference Point": "Rx"}, {"App ID": "10415 (3GPP)", "Result Code": "5064", "Category": "Permanent Failure", "Name": "DUPLICATED_AF_SESSION", "Description": "PCRF rejects a new Rx session setup because the new Rx session relates to an AF session with another related active Rx session.", "dsTest OM": "Transaction Failed", "Reference Point": "Rx"}, {"App ID": "10415 (3GPP)", "Result Code": "5065", "Category": "Permanent Failure", "Name": "IP-CAN_SESSION_NOT_AVAILABLE", "Description": "PCRF rejects a new Rx session setup when it fails to associate the described service IP flows within the session information received from the AF to an existing IP-CAN session.", "dsTest OM": "IP-CAN Session Not Available (PCRF) Transaction Failed (Client)", "Reference Point": "Rx"}, {"App ID": "10415 (3GPP)", "Result Code": "5066", "Category": "Permanent Failure", "Name": ">UNAUTHORIZED_NON_EMERGENCY_SESSION", "Description": "PCRF rejects new Rx session setup because the session binding function associated a non-Emergency IMS session to an IP-CAN session established to an Emergency APN.", "dsTest OM": "Transaction Failed", "Reference Point": "Rx"}, {"App ID": "10415 (3GPP)", "Result Code": "5067", "Category": "Permanent Failure", "Name": "UNAUTHORIZED_SPONSORED_DATA_CONNECTIVITY", "Description": "The PCRF rejects a new Rx session setup because the PCRF can’t authorize the sponsored data connectivity based on the sponsored data connectivity profile or the operator policy.", "dsTest OM": "Transaction Failed", "Reference Point": "Rx"}, {"App ID": "10415 (3GPP)", "Result Code": "5068", "Category": "Permanent Failure", "Name": "TEMPORARY_NETWORK_FAILURE", "Description": "The PCRF rejects new or modified service information because there is a temporary failure in the access network (e.g. the SGW has failed).", "dsTest OM": "Transaction Failed", "Reference Point": "Rx"}, {"App ID": "10415 (3GPP)", "Result Code": "5100", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_DATA_NOT_RECOGNIZED", "Description": "The data received by the AS is not supported or recognized.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5101", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_OPERATION_NOT_ALLOWED", "Description": "The requested operation is not allowed for the user.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh, T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5102", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_DATA_CANNOT_BE_READ", "Description": "Requested user data is not allowed to be read.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5103", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_DATA_CANNOT_BE_MODIFIED", "Description": "Requested user data is not allowed to be modified.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5104", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_DATA_CANNOT_BE_NOTIFIED", "Description": "Requested user data is not allowed to be notified on changes.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5105", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TRANSPARENT_DATA_OUT_OF_SYNC", "Description": "Repository data update at the HSS could not be completed because the requested update is based on an out-of-date version of the repository data.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5106", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SUBS_DATA_ABSENT", "Description": "AS requested to subscribe to changes to Repository Data that is not present in the HSS.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5107", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NO_SUBSCRIPTION_TO_DATA", "Description": "AS received a notification of changes of some information to which it is not subscribed.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5108", "Category": "Permanent Failure", "Name": ">DIAMETER_ERROR_DSAI_NOT_AVAILABLE", "Description": "AS addressed a DSAI not configured in the HSS.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "5120", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_START_INDICATION", "Description": "A MBMS Session Start procedure could not be performed due to some of the required session attributes that are necessary to activate the bearer resources are missing.", "dsTest OM": "Transaction Failed", "Reference Point": "Gmb"}, {"App ID": "10415 (3GPP)", "Result Code": "5121", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_STOP_INDICATION", "Description": "Session stop has been received with no session start procedure running.", "dsTest OM": "Transaction Failed", "Reference Point": "Gmb"}, {"App ID": "10415 (3GPP)", "Result Code": "5122", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNOWN_MBMS_BEARER_SERVICE", "Description": "The requested MBMS service is unknown at the BM-SC.", "dsTest OM": "Transaction Failed", "Reference Point": "Gmb"}, {"App ID": "10415 (3GPP)", "Result Code": "5123", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SERVICE_AREA", "Description": "The MBMS service area indicated for a specific MBMS Bearer Service is unknown or not available.", "dsTest OM": "Transaction Failed", "Reference Point": "Gmb"}, {"App ID": "10415 (3GPP)", "Result Code": "5140", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR>_INITIAL_PARAMETERS", "Description": "Used when the set of bearer or session or subscriber information needed by the PCRF for rule selection is incomplete/ erroneous/not available for the decision to be made.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "5141", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TRIGGER_EVENT", "Description": "Used when the set of bearer/session information sent in a CCR originated due to a trigger event been met is inconsistent with the previous set of bearer/session information for the same bearer/session.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "5142", "Category": "Permanent Failure", "Name": "DIAMETER_PCC_RULE_EVENT", "Description": "The PCC rules cannot be installed/activated. Affected PCC-Rules will be provided in the Charging-Rule-Report AVP including the reason and status. Absence of the Charging-Rule-Report means that all provided PCC rules for that specific bearer/session are affected.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "5143", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_BEARER_NOT_AUTHORIZED", "Description": "Used when the PCRF cannot authorize an IP-CAN bearer upon the reception of an IP-CAN bearer authorization request coming from the PCEF.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "5144", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TRAFFIC_MAPPING_INFO_REJECTED", "Description": "Used when the PCRF does not accept one or more of the traffic mapping filters.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "5145", "Category": "Permanent Failure", "Name": "DIAMETER_QOS_RULE_EVENT", "Description": "Used when the QoS rules cannot be installed/activated.", "dsTest OM": "Transaction Failed", "Reference Point": "Gxx"}, {"App ID": "10415 (3GPP)", "Result Code": "5147", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_CONFLICTING_REQUEST", "Description": "Used when the PCRF cannot accept the UE-initiated resource request as a network-initiated resource allocation is already in progress.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "5148", "Category": "Permanent Failure", "Name": "DIAMETER_ADC_RULE_EVENT", "Description": "Used when the ADC rules cannot be installed/activated.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx, Sd"}, {"App ID": "10415 (3GPP)", "Result Code": "5149", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NBIFOM_NOT_AUTHORIZED", "Description": "Invalid combination of IP-CAN and RAT Types or not allowed by the subscription", "dsTest OM": "Transaction Failed", "Reference Point": "Gx, Sd"}, {"App ID": "10415 (3GPP)", "Result Code": "5401", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_IMPI_UNKNOWN", "Description": "A message was received by the HSS for an IMPI that is unknown.", "dsTest OM": "Transaction Failed", "Reference Point": "Zn/Zh/Zpn"}, {"App ID": "10415 (3GPP)", "Result Code": "5402", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NOT_AUTHORIZED", "Description": "A message was received by the BSF which the BSF can not authorize.", "dsTest OM": "Transaction Failed", "Reference Point": "Zn/Zh/Zpn"}, {"App ID": "10415 (3GPP)", "Result Code": "5403", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TRANSACTION_IDENTIFIER_INVALID", "Description": "A message was received by the BSF for an invalid (e.g. unknown or expired) Bootstrapping Transaction Identifier (BTID).", "dsTest OM": "Transaction Failed", "Reference Point": "Zn/Zh/Zpn"}, {"App ID": "10415 (3GPP)", "Result Code": "5420", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNOWN_EPS_SUBSCRIPTION", "Description": "Sent by the HSS to indicate that no EPS subscription is associated with the IMSI.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, S6, S13"}, {"App ID": "10415 (3GPP)", "Result Code": "5421", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_RAT_NOT_ALLOWED", "Description": "This result code shall be sent by the HSS to indicate the RAT type the UE is using is not allowed for the IMSI.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, S6, S13"}, {"App ID": "10415 (3GPP)", "Result Code": "5422", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_EQUIPMENT_UNKNOWN", "Description": "This result code shall be sent by the EIR to indicate that the mobile equipment is not known in the EIR.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, S6, S13"}, {"App ID": "10415 (3GPP)", "Result Code": "5423", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNOWN_SERVING_NODE", "Description": "Sent by the HSS to indicate that a Notify command has been received from a serving node which is not registered in HSS as the node currently serving the user.", "dsTest OM": "Transaction Failed", "Reference Point": "S6, S13"}, {"App ID": "10415 (3GPP)", "Result Code": "5450", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_NO_NON_3GPP_SUBSCRIPTION", "Description": "This result code shall be sent by the HSS to indicate that no non-3GPP subscription is associated with the IMSI.", "dsTest OM": "Transaction Failed", "Reference Point": "STa, S6b, SWd, SWa, SWm, SWx"}, {"App ID": "10415 (3GPP)", "Result Code": "5451", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_NO_APN_SUBSCRIPTION", "Description": "Sent by the 3GPP AAA Server to indicate that the requested APN is not included in the user's profile, and therefore is not authorized for that user.", "dsTest OM": "Transaction Failed", "Reference Point": "STa,S6b/H2, SWd, SWm, SWx, T6a/T6b, S6t"}, {"App ID": "10415 (3GPP)", "Result Code": "5452", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_RAT_TYPE_NOT_ALLOWED", "Description": "Sent by the HSS to indicate the RAT type the UE is using is not allowed for the IMSI.", "dsTest OM": "Transaction Failed", "Reference Point": "STa, S6b/H2, SWd, SWm, SWx"}, {"App ID": "10415 (3GPP)", "Result Code": "5453", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_LATE_OVERLAPPING_REQUEST", "Description": "Sent by the 3GPP AAA Server to indicate that the incoming request collides with an existing session which has a more recent time stamp than the time stamp of the new request.", "dsTest OM": "Transaction Failed", "Reference Point": "STa, S6b/H2, SWd, SWm, SWx"}, {"App ID": "10415 (3GPP)", "Result Code": "5454", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TIMED_OUT_REQUEST", "Description": "Sent by the 3GPP AAA Server to indicate that the incoming request is known to have already timed out at the originating entity.", "dsTest OM": "Transaction Failed", "Reference Point": "STa, S6b/H2, SWd, SWm, SWx"}, {"App ID": "10415 (3GPP)", "Result Code": "5470", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SUBSESSION", "Description": "Used when one or more S9 subsessions within the answer contains an unsuccessful Result-Code or Experimental-Result-Code value.", "dsTest OM": "Transaction Failed", "Reference Point": "S9"}, {"App ID": "10415 (3GPP)", "Result Code": "5471", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ONGOING_SESSION_ESTABLISHMENT", "Description": "Used within the TEA command by the V-PCRF when the V-PCRF receives a TER command from the H-PCRF to trigger an S9 session establishment for the EPC-routed traffic while the S9 session is being established for the NSWO traffic by the V-PCRF initiated by the BPCF.", "dsTest OM": "Transaction Failed", "Reference Point": "S9"}, {"App ID": "10415 (3GPP)", "Result Code": "5490", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNAUTHORIZED_REQUESTING_NETWORK", "Description": "Sent by the MME to indicate that the requesting GMLC's network is not authorized to request UE location information.", "dsTest OM": "Transaction Failed", "Reference Point": "SLg, SLh"}, {"App ID": "10415 (3GPP)", "Result Code": "5510", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNAUTHORIZED_REQUESTING_ENTITY", "Description": "Sent by the HSS to indicate that the SCS is not allowed to request control plane services for an UE, to the MTC-IWF.", "dsTest OM": "Transaction Failed", "Reference Point": "S6m,S6n, S6t, T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5511", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNAUTHORIZED_SERVICE", "Description": "Sent by the HSS to indicate that the specific service requested by the SCS is not allowed for an UE, or that it cannot be delivered according to the current subscribed services of the UE.", "dsTest OM": "Transaction Failed", "Reference Point": "S6m,S6n, S6t, T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5512", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_REQUESTED_RANGE_IS_NOT ALLOWED", "Description": "Sent by the HSS to indicate that the specific service requested by the SCEF is not allowed for an UE, or that it cannot be delivered according to the current subscribed services of the UE.", "dsTest OM": "Transaction Failed", "Reference Point": "S6t"}, {"App ID": "10415 (3GPP)", "Result Code": "5513", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_CONFIGURATION_EVENT_STORAGE_NOT_ SUCCESSFUL", "Description": "Sent by the MME/SGSN to indicate that the specific service requested by the SCEF could not be stored.", "dsTest OM": "Transaction Failed", "Reference Point": "T6a/T6b, S6t"}, {"App ID": "10415 (3GPP)", "Result Code": "5514", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_CONFIGURATION_EVENT_NON_EXISTANT", "Description": "Sent by the IWK-SCEF to indicate that the requested deletion by the MME/SGSN could not be performed because the event does not exist.", "dsTest OM": "Transaction Failed", "Reference Point": "T6a/T6b, S6t"}, {"App ID": "10415 (3GPP)", "Result Code": "5515", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SCEF_REFERENCE_ID_UNKNOWN", "Description": "Sent by the SCEF to indicate that the SCEF reference ID is not known by the SCEF.", "dsTest OM": "Transaction Failed", "Reference Point": "T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5530", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_INVALID_SME_ADDRESS", "Description": "Sent by the SMS-SC to indicate that the SME address is invalid.", "dsTest OM": "Transaction Failed", "Reference Point": "T4"}, {"App ID": "10415 (3GPP)", "Result Code": "5531", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SC_CONGESTION", "Description": "Sent by the SMS-SC to indicate that SC is congested and unable to deliver the device trigger request.", "dsTest OM": "Transaction Failed", "Reference Point": "T4"}, {"App ID": "10415 (3GPP)", "Result Code": "5532", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SM_PROTOCOL", "Description": "Sent by the SMS-SC to indicate that there is an error with the protocol contained in the short message transfer protocol data unit.", "dsTest OM": "Transaction Failed", "Reference Point": "T4"}, {"App ID": "10415 (3GPP)", "Result Code": "5533", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TRIGGER_REPLACE_FAILURE", "Description": "Sent by the SMS-SC to indicate that trigger replace has failed to delete the old message and/or to store the new message.", "dsTest OM": "Transaction Failed", "Reference Point": "T4"}, {"App ID": "10415 (3GPP)", "Result Code": "5534", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TRIGGER_RECALL_FAILURE", "Description": "Sent by the SMS-SC to indicate that trigger recall has failed.", "dsTest OM": "Transaction Failed", "Reference Point": "T4"}, {"App ID": "10415 (3GPP)", "Result Code": "5535", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ORIGINAL_MESSAGE_NOT_PENDING", "Description": "Sent by the SMS-SC to indicate that trigger recall or replace has failed because the original message to be recalled or replaced is not stored any more in the SMS-SC.", "dsTest OM": "Transaction Failed", "Reference Point": "T4"}, {"App ID": "10415 (3GPP)", "Result Code": "5550", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ABSENT_USER", "Description": "Sent by the MME over the SGd interface or by the SGSN over the Gdd interface to indicate that the UE is not reachable.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5551", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_BUSY_FOR_MT_SMS", "Description": "Sent by the MME or the SGSN when the user is busy for MT SMS.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5552", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_FACILITY_NOT_SUPPORTED", "Description": "Sent to indicate a requested facility is not supported.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5553", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ILLEGAL_USER", "Description": "Sent by the MME or the SGSN to indicate that the delivery of the mobile terminated short message failed because the mobile station failed authentication.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5554", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ILLEGAL_EQUIPMENT", "Description": "Sent by the MME or the SGSN to indicate that the delivery of the mobile terminated short message failed because an IMEI check failed, i.e. the IMEI was blacklisted or not white-listed.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c,SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5555", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SM_DELIVERY_FAILURE", "Description": "Sent by the MME or the SGSN or the SMS-IWMSC to indicate that the delivery of the mobile terminated short message failed.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5556", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SERVICE_NOT_SUBSCRIBED", "Description": "Sent by the HSS or the SMS Router over the S6c interface to indicate that the MT SMS Teleservice is not part of the subscription.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5557", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_SERVICE_BARRED", "Description": "Sent by the HSS or the SMS Router over the S6c interface to indicate that the MT SMS Teleservice is barred.Sent by the MME to indicate that the delivery of the mobile terminated short message failed because of the barring of the SMS service.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5558", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_MWD_LIST_FULL", "Description": "Sent by the HSS over the S6c interface to indicate that the Message Waiting List is full.", "dsTest OM": "Transaction Failed", "Reference Point": "S6c, SGd/Gdd"}, {"App ID": "10415 (3GPP)", "Result Code": "5570", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNOWN_POLICY_COUNTERS", "Description": "Used by the OCS to indicate to the PCRF that the OCS does not recognize one or more Policy Counters specified in the request, when the OCS is configured to reject the request provided with unknown policy counter identifier(s).", "dsTest OM": "Transaction Failed", "Reference Point": "Sy"}, {"App ID": "10415 (3GPP)", "Result Code": "5590", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR__ORIGIN_ALUID_UNKNOWN", "Description": "Indicates that there is no valid context associated to the origin ALUID received in the request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5591", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TARGET_ALUID_UNKNOWN", "Description": "Indicates that there is no valid context associated to the target ALUID received in the request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5592", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_PFID_UNKNOWN", "Description": "Indicates that there is no valid ProSe Function associate to the PFID received in the request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5593", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_APP_REGISTER_REJECT", "Description": "Indicates that the ProSe Application Server cannot accept the application registration request for an unspecific reason.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5594", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_PROSE_MAP_REQUEST_DISALLOWED", "Description": "Indicates that the ProSe Application Server cannot accept the map request because the targeted application user is not allowed to be discovered by the originating application user.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5595", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_MAP_REQUEST_REJECT", "Description": "Indicates that the ProSe Application Server cannot accept the map request for an unspecific reason.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5596", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_REQUESTING_RPAUID_UNKNOWN", "Description": "Indicates that the ProSe Application Server cannot find the requesting RPAUID included in the restricted discovery authorization request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5597", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNOWN_OR_INVALID_TARGET_SET", "Description": "Indicates that the ProSe Application Server cannot authorize the request because all target RPAUID(s) provided in the request are either unknown to the ProSe Application Server, or not eligible to be discovered by the requesting RPAUID.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5598", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_MISSING_APPLICATION_DATA", "Description": "Indicates that there is no application data provided so the ProSe Application Server cannot process the corresponding discovery request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5599", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_AUTHORIZATION_REJECT", "Description": "Indicates that for the particular requesting type of restricted discovery, the ProSe Application Server found that the requesting RPAUID is not authorized.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5600", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_DISCOVERY_NOT_PERMITTED", "Description": "Indicates that the requesting RPAUID is not allowed to discover the target RPAUID.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5601", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_TARGET_RPAUID_UNKNOWN", "Description": "Indicates that there is no valid target RPAUID received in the request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5602", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_INVALID_APPLICATION_DATA", "Description": "Indicates that there is invalid application data provided so the ProSe Application Server cannot process the corresponding discovery request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC2"}, {"App ID": "10415 (3GPP)", "Result Code": "5610", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNOWN_PROSE_SUBSCRIPTION", "Description": "", "dsTest OM": "Transaction Failed", "Reference Point": "PC4"}, {"App ID": "10415 (3GPP)", "Result Code": "5611", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_PROSE_NOT_ALLOWED", "Description": "Sent by the HSS to indicate that ProSe is not allowed to be used in the specific PLMN where the UE is registered.", "dsTest OM": "Transaction Failed", "Reference Point": "PC4"}, {"App ID": "10415 (3GPP)", "Result Code": "5612", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UE_LOCATION_UNKNOWN", "Description": "Sent by the HSS to indicate that the initial location of the UE is unknown.", "dsTest OM": "Transaction Failed", "Reference Point": "PC4"}, {"App ID": "10415 (3GPP)", "Result Code": "5630", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NO_ASSOCIATED_DISCOVERY_FILTER", "Description": "Sent by the ProSe Function in the local/visited PLMN to indicate that there is no valid Discovery Filter associated to the ProSe Application ID name received in the request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5631", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ANNOUNCING_UNAUTHORIZED_IN_PLMN", "Description": "Sent by the ProSe Function in the local/visited PLMN to indicate that the UE is not authorized to announce in this PLMN.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5632", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_INVALID_APPLICATION_CODE", "Description": "Sent by the ProSe Function in the local PLMN to indicate that none of the ProSe Application Code(s) received in the request is valid.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5633", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_PROXIMITY_UNAUTHORIZED", "Description": "Sent by the ProSe Function in the serving PLMN to indicate that the Proximity request is not authorized by the user.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5634", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_PROXIMITY_REJECTED", "Description": "Sent by the ProSe Function in the serving PLMN to indicate that it is unlikely that UEs enter into proximity for the received time window.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5635", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NO_PROXIMITY_REQUEST", "Description": "Sent by the ProSe Function in the serving PLMN to indicate that there is no context associated with EPC ProSe User Identities included in the request.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5636", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNAUTHORIZED_SERVICE_IN_THIS_PLMN", "Description": "Sent by the ProSe Function HPLMN to indicate that ProSe is not authorized to announce in this PLMN.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5637", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_PROXIMITY_CANCELLED", "Description": "Sent by the ProSe Function triggering the Proximity Request to indicate that the cancellation of the Proximity Request procedure as it determines that the UEs are unlikely to enter proximity within the requested time window.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5638", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_INVALID_TARGET_PDUID", "Description": "Sent by the ProSe Function to indicate that the PDUID is not belonging to this ProSe Function.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5639", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_INVALID_TARGET_RPAUID", "Description": "Sent by the ProSe Function to indicate that the target RPAUID is not allowed to be discovered.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5640", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NO_ASSOCIATED_RESTRICTED_CODE", "Description": "Sent by the ProSe Function to indicate that the there is no allocated ProSe Restricted Code for the requested target.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5641", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_INVALID_DISCOVERY_TYPE", "Description": "Sent by the ProSe Function to indicate that the Discovery Tpe in the request message is not supported.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "56x1", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_REVOCATION_FAILURE", "Description": "Indicates that the ProSe Function was unable to successfully complete the revocation procedure (in an operator-configured time period).", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "56x2", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_ALREADY_BANNED", "Description": "Indicates that the ProSe Function has determined that the revocation is not necessary because the target RPAUID has already been banned for discovery.", "dsTest OM": "Transaction Failed", "Reference Point": "PC6/PC7"}, {"App ID": "10415 (3GPP)", "Result Code": "5650", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_REQUESTED_LOCATION_NOT_SERVED", "Description": "Sent sent by the MME/SGSN to indicate that the location for which a related monitoring event is configured (e.g. Number of UEs at a given geographical location) by the SCEF, is not served by the MME/SGSN.", "dsTest OM": "Transaction Failed", "Reference Point": "T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5651", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_INVALID_EPS_BEARER", "Description": "Sent by the SCEF or the MME to indicate that there is no existing EPS bearer context for the user.", "dsTest OM": "Transaction Failed", "Reference Point": "T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5652", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_NIDD_CONFIGURATION_NOT_AVAILABLE", "Description": "Sent by the SCEF to indicate that there is no valid NIDD configuration available.", "dsTest OM": "Transaction Failed", "Reference Point": "T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5653", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_USER_TEMPORARILY_UNREACHABLE", "Description": "Sent by the MME or SGSN to indicate that the UE is temporarily not reachable due to a power saving function, and that the MME or SGSN will update the SCEF when it detects that the UE is reachable or about to become reachable.", "dsTest OM": "Transaction Failed", "Reference Point": "T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "5670", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNKOWN_DATA", "Description": "The requested data received by the MC Service User Database does not exist", "dsTest OM": "Transaction Failed", "Reference Point": "TS 29.283"}, {"App ID": "10415 (3GPP)", "Result Code": "5671", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_REQUIRED_KEY_NOT_PROVIDED", "Description": "One or more access keys are missing in the request to be able to update the requested data", "dsTest OM": "Transaction Failed", "Reference Point": "TS 29.283"}, {"App ID": "10415 (3GPP)", "Result Code": "5690", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_UNKNOWN_V2X_SUBSCRIPTION", "Description": "", "dsTest OM": "Transaction Failed", "Reference Point": "TS 29.368"}, {"App ID": "10415 (3GPP)", "Result Code": "5691", "Category": "Permanent Failure", "Name": "DIAMETER_ERROR_V2X_NOT_ALLOWED", "Description": "", "dsTest OM": "Transaction Failed", "Reference Point": "TS 29.368"}, {"App ID": "0", "Result Code": "4001", "Category": "Transient Failures", "Name": "DIAMETER_AUTHENTICATION_REJECTED", "Description": "The authentication process for the user failed, most likely due to an invalid password used by the user.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "4002", "Category": "Transient Failures", "Name": "DIAMETER_OUT_OF_SPACE", "Description": "Received accounting information but unable to store it because of lack of memory.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "4003", "Category": "Transient Failures", "Name": "ELECTION_LOST", "Description": "Peer has determined that it has lost the election process and has therefore disconnected the transport connection.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "4004", "Category": "Transient Failures", "Name": "", "Description": "", "dsTest OM": "", "Reference Point": "RFC4004"}, {"App ID": "0", "Result Code": "4005", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_MIP_REPLY_FAILURE", "Description": "Used by the home agent when processing of the Registration Request has failed.", "dsTest OM": "Transaction Failed", "Reference Point": "RFC4004"}, {"App ID": "0", "Result Code": "4006", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_HA_NOT_AVAILABLE", "Description": "Used to inform the foreign agent that the requested Home Agent cannot be assigned to the mobile node at this time. The foreign agent MUST return a Mobile IPv4 Registration", "dsTest OM": "Transaction Failed", "Reference Point": "RFC4004"}, {"App ID": "0", "Result Code": "4007", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_BAD_KEY", "Description": "Used by the home agent to indicate to the local Diameter server that the key generated is invalid.", "dsTest OM": "Transaction Failed", "Reference Point": "RFC4004"}, {"App ID": "0", "Result Code": "4008", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_MIP_FILTER_NOT_SUPPORTED", "Description": "Used by a mobility agent to indicate to the home Diameter server that the requested packet filter Rules cannot be supported.", "dsTest OM": "Transaction Failed", "Reference Point": "RFC4004"}, {"App ID": "0", "Result Code": "4009", "Category": "Transient Failures", "Name": "", "Description": "", "dsTest OM": "", "Reference Point": "RFC4004"}, {"App ID": "0", "Result Code": "4010", "Category": "Transient Failures", "Name": "DIAMETER_END_USER_SERVICE_DENIED", "Description": "Request denied due to service restrictions.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "4011", "Category": "Transient Failures", "Name": "DIAMETER_CREDIT_CONTROL_NOT_APPLICABLE", "Description": "Service can be granted but that further credit-control is needed for the service.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "4012", "Category": "Transient Failures", "Name": "DIAMETER_CREDIT_LIMIT_REACHED", "Description": "Request denied because the end user's account could not cover the requested service.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "", "Result Code": "4013", "Category": "Transient Failures", "Name": "DIAMETER_USER_NAME_REQUIRED", "Description": "The Diameter request did not contain a User-Name AVP, which is required to complete the transaction. The Diameter peer MAY include a User-Name AVP and attempt the request again.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "4014", "Category": "Transient Failures", "Name": "RESOURCE_FAILURE", "Description": "The DNCA Diameter peer within the NAT device indicates that the binding could not be installed or a new session could not be created due to resource shortage.", "dsTest OM": "", "Reference Point": "RFC6736"}, {"App ID": "10415 (3GPP)", "Result Code": "4100", "Category": "Transient Failures", "Name": "DIAMETER_USER_DATA_NOT_AVAILABLE", "Description": "Requested user data is not available at this time to satisfy the requested operation.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "4101", "Category": "Transient Failures", "Name": "DIAMETER_PRIOR_UPDATE_IN_PROGRESS", "Description": "Repository data update at the HSS could not be completed because the related repository data is currently being updated by another entity.", "dsTest OM": "Transaction Failed", "Reference Point": "Sh/Dh"}, {"App ID": "10415 (3GPP)", "Result Code": "4121", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_OUT_OF_RESOURCES", "Description": "A MBMS Session Start procedure could not be performed due to a temporary resource shortage in the GGSN. The BM-SC may re-try later.", "dsTest OM": "", "Reference Point": "Gmb"}, {"App ID": "10415 (3GPP)", "Result Code": "4141", "Category": "Transient Failures", "Name": "DIAMETER_PCC_BEARER_EVENT", "Description": "Used when a PCC rule cannot be enforced or modified successfully in a network initiated procedure.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "4142", "Category": "Transient Failures", "Name": "DIAMETER_BEARER_EVENT", "Description": "Used when a QoS rule cannot be enforced or modified successfully in a network initiated procedure", "dsTest OM": "Transaction Failed", "Reference Point": "Gxx"}, {"App ID": "10415 (3GPP)", "Result Code": "4143", "Category": "Transient Failures", "Name": "DIAMETER_AN_GW_FAILED", "Description": "Used when the policy decisions received within a RAR initiated by the PCRF cannot be enforced by the PCEF because the AN-Gateway has failed.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx"}, {"App ID": "10415 (3GPP)", "Result Code": "4144", "Category": "Transient Failures", "Name": "DIAMETER_PENDING_TRANSACTION", "Description": "Used when a node that supports the PendingTransaction feature receives an incoming request on a session while it has an ongoing transaction on the same session and cannot handle the request.", "dsTest OM": "Transaction Failed", "Reference Point": "Gx, S9, Np"}, {"App ID": "10415 (3GPP)", "Result Code": "4181", "Category": "Transient Failures", "Name": "DIAMETER_AUTHENTICATION_DATA_UNAVAILABLE", "Description": "Sent by the HSS to indicate that an unexpectedly transient failure occurs. The requesting node can try the request again in the future.", "dsTest OM": "Transaction Failed", "Reference Point": "Cx/Dx, S6, S13"}, {"App ID": "3GPP(10415)", "Result Code": "4182", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_CAMEL_SUBSCRIPTION_PRESENT", "Description": "Sent by the HSS to indicate that the subscriber to be registered has SGSN CAMEL Subscription data.", "dsTest OM": "Transaction Failed", "Reference Point": "S6, S13, S7a,S7d"}, {"App ID": "10415 (3GPP)", "Result Code": "4201", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_ABSENT_USER", "Description": "Sent by the HSS to indicate that the location of the targeted user is not known at this time to satisfy the requested operation.", "dsTest OM": "Transaction Failed", "Reference Point": "SLh"}, {"App ID": "10415 (3GPP)", "Result Code": "4221", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_UNREACHABLE_USER", "Description": "Sent by the MME to indicate that the user could not be reached in order to perform positioning procedure.", "dsTest OM": "Transaction Failed", "Reference Point": "SLg, T6a/T6b"}, {"App ID": "10415 (3GPP)", "Result Code": "4222", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_SUSPENDED_USER", "Description": "Sent by the MME to indicate that the user is suspended in the MME.", "dsTest OM": "Transaction Failed", "Reference Point": "SLg"}, {"App ID": "10415 (3GPP)", "Result Code": "4223", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_DETACHED_USER", "Description": "Sent by the MME to indicate that the user is detached in the MME.", "dsTest OM": "Transaction Failed", "Reference Point": "SLg"}, {"App ID": "10415 (3GPP)", "Result Code": "4224", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_POSITIONING_DENIED", "Description": "Sent by the MME to indicate that the positioning procedure was denied.", "dsTest OM": "Transaction Failed", "Reference Point": "SLg"}, {"App ID": "10415 (3GPP)", "Result Code": "4225", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_POSITIONING_FAILED", "Description": "Sent by the MME to indicate that the positioning procedure failed.", "dsTest OM": "Transaction Failed", "Reference Point": "SLg"}, {"App ID": "10415 (3GPP)", "Result Code": "4226", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_UNKNOWN_UNREACHABLE LCS_CLIENT", "Description": "Sent by the GMLC to indicate that the LCS Client was not known or could not be reached.", "dsTest OM": "Transaction Failed", "Reference Point": "SLg"}, {"App ID": "10415 (3GPP)", "Result Code": "4241", "Category": "Transient Failures", "Name": "DIAMETER_ERROR_NO_AVAILABLE_POLICY_COUNTERS", "Description": "Used by the OCS to indicate to the PCRF that the OCS has no available policy counters for the subscriber.", "dsTest OM": "Transaction Failed", "Reference Point": "Sy"}, {"App ID": "10415 (3GPP)", "Result Code": "4261", "Category": "Transient Failures", "Name": "REQUESTED_SERVICE_TEMPORARILY_NOT_AUTHORIZED", "Description": "The PCRF temporarily rejects new or modified service information because the network is temporarily not able to provide the service delivery that the AF requested, e.g. due to the service information is not consistent with the operator defined policy rules for the congestion status of the user.", "dsTest OM": "Transaction Failed", "Reference Point": "Rx"}, {"App ID": "0", "Result Code": "3001", "Category": "Protocol Failures", "Name": "DIAMETER_COMMAND_UNSUPPORTED", "Description": "Returned if received. Diameter command code is not supported/not recognized.", "dsTest OM": "Unsupported Message Rcvd; Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3002", "Category": "Protocol Failures", "Name": "DIAMETER_UNABLE_TO_DELIVER", "Description": "Message can not be delivered to the destination, because no host within the realm supporting the required application was available to process the request or the Destination-Host AVP was given without the associated Destination-Realm AVP.", "dsTest OM": "Unable to Deliver Rcvd; Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3003", "Category": "Protocol Failures", "Name": "DIAMETER_REALM_NOT_SERVED", "Description": "Intended Realm is not recognized.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3004", "Category": "Protocol Failures", "Name": "DIAMETER_TOO_BUSY", "Description": "Unable to provide requested service while all other prerequisite checks are valid.", "dsTest OM": "Too Busy Errors Received; Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3005", "Category": "Protocol Failures", "Name": "DIAMETER_LOOP_DETECTED", "Description": "A loop was detected while trying to get the message to the intended recipient.", "dsTest OM": "", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3006", "Category": "Protocol Failures", "Name": "DIAMETER_REDIRECT_INDICATION", "Description": "Redirect agent determined the request could not be satisfied locally, and the initiator should direct the request directly to the server whose contact information has been added to the response.", "dsTest OM": "Redirect Indication Rcvd", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3007", "Category": "Protocol Failures", "Name": "DIAMETER_APPLICATION_UNSUPPORTED", "Description": "Request was received for an application that is not supported.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3008", "Category": "Protocol Failures", "Name": "DIAMETER_INVALID_HDR_BITS", "Description": "Request was received whose bits in the Diameter header were an invalid combination or a value inconsistent with the Command Code's definition.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3009", "Category": "Protocol Failures", "Name": "DIAMETER_INVALID_AVP_BITS", "Description": "Request received included an AVP whose flag bits are set to an unrecognized value or that is inconsistent with the AVP's definition.", "dsTest OM": "Transaction Failed", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3010", "Category": "Protocol Failures", "Name": "DIAMETER_UNKNOWN_PEER", "Description": "CER message was received from unknown peer.", "dsTest OM": "", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "3011", "Category": "Protocol Failures", "Name": "DIAMETER_REALM_REDIRECT_INDICATION", "Description": "Indicates that a server has determined that the request within an application supporting realm-based redirection could not be satisfied locally, and the initiator of the request SHOULD direct the request directly to a peer within a realm that has been identified in the response.", "dsTest OM": "", "Reference Point": "Base Diameter"}, {"App ID": "0", "Result Code": "2001", "Category": "Success", "Name": "DIAMETER_SUCCESS", "Description": "Request was successfully completed.", "dsTest OM": "Transaction Successful", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "2001", "Category": "Success", "Name": "DIAMETER_FIRST_REGISTRATION", "Description": "User is authorized to register in this server. The user was not registered yet.", "dsTest OM": "Transaction Successful", "Reference Point": "Cx/Dx"}, {"App ID": "0", "Result Code": "2002", "Category": "Success", "Name": "DIAMETER_LIMITED_SUCCESS", "Description": "Request is processed but additional processing is required to provide access to user.", "dsTest OM": "Transaction Successful", "Reference Point": "Base Diameter"}, {"App ID": "10415 (3GPP)", "Result Code": "2002", "Category": "Success", "Name": "DIAMETER_SUBSEQUENT_REGISTRATION", "Description": "HSS informs the I-CSCF that the user is authorized to register this public identity, or AS-CSCF is already assigned and there is no need to select a new one.", "dsTest OM": "Transaction Successful", "Reference Point": "Cx/Dx"}, {"App ID": "10415 (3GPP)", "Result Code": "2003", "Category": "Success", "Name": "DIAMETER_UNREGISTERED_SERVICE", "Description": "HSS informs the I-CSCF the public identity is not registered but has services related to unregistered state or the AS-CSCF shall be assigned to the user.", "dsTest OM": "Transaction Successful", "Reference Point": "Cx/Dx"}, {"App ID": "", "Result Code": "2003", "Category": "Success", "Name": "DIAMETER_FIRST_REGISTRATION", "Description": "The user was not previously registered. The Diameter server has now authorized the registration.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "10415 (3GPP)", "Result Code": "2004", "Category": "Success", "Name": "DIAMETER_SUCCESS_SERVER_NAME_NOT_STORED", "Description": "HSS informs the S-CSCF that the de-registration is completed or the S-CSCF name is not stored in the HSS.", "dsTest OM": "Transaction Successful", "Reference Point": "Cx/Dx"}, {"App ID": "", "Result Code": "2004", "Category": "Success", "Name": "DIAMETER_SUBSEQUENT_REGISTRATION", "Description": "The user is already registered. The Diameter server has now authorized the re-registration.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "2005", "Category": "Success", "Name": "DIAMETER_UNREGISTERED_SERVICE", "Description": "The user is not currently registered, but the requested service can still be granted to the user.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "2006", "Category": "Success", "Name": "DIAMETER_SUCCESS_SERVER_NAME_NOT_STORED", "Description": "The request operation was successfully processed. The Diameter server does not keep a record of the SIP server address assigned to the user.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "2007", "Category": "Success", "Name": "DIAMETER_SERVER_SELECTION", "Description": "The Diameter server has authorized the registration. The user has already been assigned a SIP server, but it may be necessary to select a new SIP server for the user.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "2008", "Category": "Success", "Name": "DIAMETER_SUCCESS_AUTH_SENT_SERVER_NOT_STORED", "Description": "The requested operation was successfully executed. The Diameter server is sending a number of authentication credentials in the answer message. The Diameter server does not keep a record of the SIP server.", "dsTest OM": "", "Reference Point": "SIP, RFC4740"}, {"App ID": "", "Result Code": "2009", "Category": "Success", "Name": "DIAMETER_SUCCESS_RELOCATE_HA", "Description": "", "dsTest OM": "", "Reference Point": "RFC5778"}, {"App ID": "10415 (3GPP)", "Result Code": "2021", "Category": "Success", "Name": "DIAMETER_PDP_CONTEXT_DELETION_INDICATION", "Description": "(GGSN) - indication to the server that the requested PDP Context or IP-CAN session has been deleted; (PGW) - indication to the server that the requested bearer or IP-CAN session has been deleted.", "dsTest OM": "", "Reference Point": "Gi/SGi"}, {"App ID": "0", "Result Code": "1001", "Category": "Informational", "Name": "DIAMETER_MULTI_ROUND_AUTH", "Description": "Informs sender that the authentication mechanism being used requires multiple round trips, and a subsequent requests need to be issued in order for access to be granted.", "dsTest OM": "", "Reference Point": "Base Diameter"}];
+        
+        function getCategoryClass(category) {
+            const cat = category.toLowerCase();
+            if (cat.includes('permanent')) return 'badge-red';
+            if (cat.includes('transient')) return 'badge-yellow';
+            if (cat.includes('success')) return 'badge-green';
+            return 'badge-blue';
+        }
+
+        function highlightText(text, searchTerm) {
+            if (!searchTerm || !text) return text;
+            const regex = new RegExp(`(${searchTerm})`, 'gi');
+            return String(text).replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function renderTable(filteredData, searchTerm = '') {
+            const tableBody = document.getElementById('tableBody');
+            const noResults = document.getElementById('noResults');
             
-            try {
-                navigator.clipboard.writeText(copyText.value).then(() => {
-                     // Visual feedback singkat pada tombol
-                    const originalText = event.target.innerHTML;
-                    event.target.innerHTML = '<span class="text-emerald-600">Copied!</span>';
-                    setTimeout(() => { event.target.innerHTML = originalText; }, 2000);
-                });
-            } catch (err) {
-                alert("Gagal menyalin. Silakan salin manual.");
+            tableBody.innerHTML = '';
+            
+            filteredData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="font-family: monospace; font-weight: 700; color: var(--primary-blue);">${highlightText(row['App ID'], searchTerm)}</td>
+                    <td style="font-family: monospace; font-weight: 700; color: var(--primary-blue);">${highlightText(row['Result Code'], searchTerm)}</td>
+                    <td><span class="badge ${getCategoryClass(row.Category)}">${highlightText(row.Category, searchTerm)}</span></td>
+                    <td style="font-weight: 600;">${highlightText(row.Name, searchTerm)}</td>
+                    <td>${highlightText(row.Description, searchTerm)}</td>
+                    <td>${highlightText(row['dsTest OM'], searchTerm)}</td>
+                    <td style="font-size: 0.85rem;">${highlightText(row['Reference Point'], searchTerm)}</td>
+                `;
+                tableBody.appendChild(tr);
+            });
+
+            document.getElementById('visibleCount').textContent = filteredData.length;
+            
+            if (filteredData.length === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
             }
         }
-        
-        // Initialize Tab (Optional: memastikan tab IP terbuka saat load)
-        switchTab('ip');
+
+        function filterData(searchTerm) {
+            if (!searchTerm) {
+                renderTable(diameterData);
+                return;
+            }
+
+            const term = searchTerm.toLowerCase();
+            const filtered = diameterData.filter(row => {
+                return Object.values(row).some(value => 
+                    String(value).toLowerCase().includes(term)
+                );
+            });
+
+            renderTable(filtered, searchTerm);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            filterData(e.target.value);
+        });
+
+        // Initialize Diameter table
+        document.getElementById('totalCount').textContent = diameterData.length;
+        renderTable(diameterData);
     </script>
 </body>
 </html>
