@@ -621,6 +621,53 @@
                 </div>
                 
                 <div id="errorMsgDiff" class="error-msg"></div>
+
+                <!-- IMSI CHECKER SECTION -->
+                <div style="margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--border-color);">
+                    <h2 class="section-title">
+                        <span class="icon">🔐</span>
+                        IMSI Checker
+                    </h2>
+                    <p style="color: var(--text-gray); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                        Check if IMSI list <b>does NOT exist</b> in New Data (Updated). Paste IMSI numbers below (one per line or separated by comma/space).
+                    </p>
+
+                    <div>
+                        <label class="label">IMSI List to Check</label>
+                        <textarea id="imsiCheckInput" rows="6" placeholder="e.g.&#10;510106726703812&#10;510107633206812"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="checkIMSI()" style="width: 100%; margin-top: 1rem;">
+                        Check IMSI
+                    </button>
+
+                    <div id="resultAreaIMSI" class="hidden" style="margin-top: 1.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                            <h3 style="font-weight: 700; color: var(--text-dark);">IMSI Check Result:</h3>
+                            <span id="imsiSafeCount" class="badge badge-green">0 Safe</span>
+                            <span id="imsiFoundCount" class="badge badge-red">0 Found in New Data</span>
+                        </div>
+                        
+                        <div class="grid grid-2" style="gap: 1rem;">
+                            <div>
+                                <h4 style="font-weight: 600; color: #059669; margin-bottom: 0.5rem; font-size: 0.95rem;">✓ Safe (Not in New Data)</h4>
+                                <div style="position: relative;">
+                                    <textarea id="imsiSafeOutput" readonly rows="10" style="background: #d1fae5; border-color: #059669;"></textarea>
+                                    <button class="copy-btn" onclick="copyIMSISafe()" style="top: 0.5rem; right: 0.5rem;">📋 Copy</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="font-weight: 600; color: #dc2626; margin-bottom: 0.5rem; font-size: 0.95rem;">⚠️ Found in New Data</h4>
+                                <div style="position: relative;">
+                                    <textarea id="imsiFoundOutput" readonly rows="10" style="background: #fee2e2; border-color: #dc2626;"></textarea>
+                                    <button class="copy-btn" onclick="copyIMSIFound()" style="top: 0.5rem; right: 0.5rem;">📋 Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="errorMsgIMSI" class="error-msg"></div>
+                </div>
             </div>
 
             <!-- DIAMETER RESULT CODES -->
@@ -845,6 +892,94 @@
                 const originalText = btn.innerHTML;
                 btn.innerHTML = '✓ Copied!';
                 btn.style.color = 'var(--primary-blue)';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                alert("Copy failed. Please copy manually.");
+            });
+        }
+
+        // IMSI CHECKER
+        function checkIMSI() {
+            const imsiInput = document.getElementById('imsiCheckInput').value;
+            const newData = document.getElementById('diffInput2').value;
+            const resultArea = document.getElementById('resultAreaIMSI');
+            const errorMsg = document.getElementById('errorMsgIMSI');
+            const safeOutput = document.getElementById('imsiSafeOutput');
+            const foundOutput = document.getElementById('imsiFoundOutput');
+            const safeCount = document.getElementById('imsiSafeCount');
+            const foundCount = document.getElementById('imsiFoundCount');
+
+            resultArea.classList.add('hidden');
+            errorMsg.classList.remove('show');
+
+            if (!imsiInput.trim()) {
+                errorMsg.innerText = "Please enter IMSI numbers to check.";
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            if (!newData.trim()) {
+                errorMsg.innerText = "Please fill in 'New Data (Updated)' field first.";
+                errorMsg.classList.add('show');
+                return;
+            }
+
+            // Parse IMSI list
+            const imsiList = cleanAndSplit(imsiInput);
+            const newDataSet = new Set(cleanAndSplit(newData));
+
+            // Separate IMSI into safe and found
+            const safeIMSI = [];
+            const foundIMSI = [];
+
+            imsiList.forEach(imsi => {
+                if (newDataSet.has(imsi)) {
+                    foundIMSI.push(imsi);
+                } else {
+                    safeIMSI.push(imsi);
+                }
+            });
+
+            // Display results
+            safeOutput.value = safeIMSI.length > 0 ? safeIMSI.join("\n") : "No safe IMSI (all found in New Data)";
+            foundOutput.value = foundIMSI.length > 0 ? foundIMSI.join("\n") : "None (all IMSI are safe)";
+
+            safeCount.innerText = `${safeIMSI.length} Safe`;
+            foundCount.innerText = `${foundIMSI.length} Found in New Data`;
+
+            resultArea.classList.remove('hidden');
+        }
+
+        function copyIMSISafe() {
+            const copyText = document.getElementById("imsiSafeOutput");
+            if (!copyText.value || copyText.value.startsWith("No safe")) return;
+            
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.style.color = '#059669';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(() => {
+                alert("Copy failed. Please copy manually.");
+            });
+        }
+
+        function copyIMSIFound() {
+            const copyText = document.getElementById("imsiFoundOutput");
+            if (!copyText.value || copyText.value.startsWith("None")) return;
+            
+            navigator.clipboard.writeText(copyText.value).then(() => {
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✓ Copied!';
+                btn.style.color = '#dc2626';
                 setTimeout(() => {
                     btn.innerHTML = originalText;
                     btn.style.color = '';
